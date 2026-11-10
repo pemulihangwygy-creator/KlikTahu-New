@@ -1,0 +1,41 @@
+{
+  "name": "kliktahu-video",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Motion-graphics explainer renderer (Remotion + React)",
+  "scripts": {
+    "assets": "node scripts/copy-fonts.mjs && node scripts/make-noise.mjs && node scripts/make-audio.mjs",
+    "timeline": "node scripts/build-timeline.mjs",
+    "prep": "npm run assets && npm run timeline",
+    "dev": "remotion studio",
+    "still": "remotion still KlikTahuLong",
+    "render:long": "node scripts/render.mjs long && node scripts/finalize.mjs out/long-raw.mp4 out/long.mp4",
+    "render:short": "node scripts/render.mjs short && node scripts/finalize.mjs out/short-raw.mp4 out/short.mp4",
+    "typecheck": "tsc --noEmit",
+    "schedule": "node scripts/preview-frames.mjs",
+    "subs": "node scripts/make-srt.mjs long out/long.srt && node scripts/make-srt.mjs short out/short.srt",
+    "posters": "node scripts/make-posters.mjs",
+    "finalize": "node scripts/finalize.mjs",
+    "deliver": "npm run prep && npm run typecheck && npm run render:long && npm run render:short && npm run subs && npm run posters",
+    "render": "node scripts/render.mjs",
+    "check": "node scripts/selfcheck.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.542",
+    "@remotion/fonts": "4.0.542",
+    "@remotion/media-utils": "4.0.542",
+    "@remotion/motion-blur": "4.0.542",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.542"
+  },
+  "devDependencies": {
+    "@fontsource-variable/bricolage-grotesque": "5.2.10",
+    "@fontsource-variable/jetbrains-mono": "5.2.8",
+    "@fontsource-variable/plus-jakarta-sans": "5.2.8",
+    "@types/node": "22.18.8",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.1",
+    "typescript": "5.9.3"
+  }
+}

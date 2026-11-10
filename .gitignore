@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+
+# generated media (rebuilt with `npm run assets`)
+public/fonts/
+public/music/
+public/sfx/
+public/tex/
+public/vo/*.mp3
+
+# render output & local scratch
+.tmp/
+out/
+*.mp4
+*.mov
+*.png
+*.jpg
+
+# local chromium (sandbox only)
+.chromium/
+
+# editors / os
+.DS_Store
+.vscode/
+.idea/
+*.log
+
+# generated subtitles
+metadata/*.srt
