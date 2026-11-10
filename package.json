@@ -17,7 +17,8 @@
     "posters": "node scripts/make-posters.mjs",
     "finalize": "node scripts/finalize.mjs",
     "deliver": "npm run prep && npm run typecheck && npm run render:long && npm run render:short && npm run subs && npm run posters",
-    "render": "node scripts/render.mjs"
+    "render": "node scripts/render.mjs",
+    "check": "node scripts/selfcheck.mjs"
   },
   "dependencies": {
     "@remotion/cli": "4.0.542",
