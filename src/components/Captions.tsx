@@ -81,10 +81,8 @@ export const Captions: React.FC<{lines: VoPlacement[]; scale?: number; bottom?: 
             color: C.paper,
             padding: `${22 * scale}px ${36 * scale}px`,
             borderRadius: 28 * scale,
-            background: 'rgba(10,8,15,0.58)',
-            border: '1px solid rgba(247,242,232,0.14)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
+            background: 'rgba(10,8,15,0.72)',
+            border: '1px solid rgba(247,242,232,0.16)',
             boxShadow: '0 18px 60px rgba(0,0,0,0.5)',
             transform: `scale(${0.96 + pop * 0.04})`,
           }}

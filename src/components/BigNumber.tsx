@@ -88,7 +88,7 @@ export const BigNumber: React.FC<{
   if (!blur) return body;
   // trail only while the number is actually changing
   return (
-    <Trail layers={Math.min(6, Math.max(2, Math.round(dur / 9)))} lagInFrames={2} trailOpacity={0.22}>
+    <Trail layers={Math.min(4, Math.max(2, Math.round(dur / 12)))} lagInFrames={2} trailOpacity={0.2}>
       {body}
     </Trail>
   );
