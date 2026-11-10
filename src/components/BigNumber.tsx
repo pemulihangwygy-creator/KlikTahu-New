@@ -34,7 +34,7 @@ export const BigNumber: React.FC<{
       <span>{intFmt}</span>
       {decimals > 0 ? (
         <>
-          <span style={{opacity: 0.5, margin: `0 ${size * 0.012}px`}}>,</span>
+          <span style={{fontSize: size * 0.34, opacity: 0.72, margin: `0 ${size * 0.005}px`}}>,</span>
           <span>{dec}</span>
         </>
       ) : null}

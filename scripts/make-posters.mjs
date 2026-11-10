@@ -14,7 +14,7 @@ mkdirSync(out, {recursive: true});
 /** frames chosen from src/data/scenes.ts timings: hook (receipt) and the 1998 reveal */
 const shots = [
   ['KlikTahuLong', 'long-poster', 663],
-  ['KlikTahuLong', 'long-crisis', 8700],
+  ['KlikTahuLong', 'long-thumbnail-1998', 8700],
   ['KlikTahuShort', 'short-poster', 900],
 ];
 
