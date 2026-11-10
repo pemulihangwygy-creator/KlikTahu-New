@@ -11,10 +11,11 @@ const root = process.cwd();
 const out = join(root, 'out');
 mkdirSync(out, {recursive: true});
 
+/** frames chosen from src/data/scenes.ts timings: hook (receipt) and the 1998 reveal */
 const shots = [
   ['KlikTahuLong', 'long-poster', 663],
-  ['KlikTahuLong', 'long-crisis', 14000],
-  ['KlikTahuShort', 'short-poster', 210],
+  ['KlikTahuLong', 'long-crisis', 8700],
+  ['KlikTahuShort', 'short-poster', 900],
 ];
 
 for (const [comp, name, frame] of shots) {
