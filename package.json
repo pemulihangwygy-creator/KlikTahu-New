@@ -12,7 +12,9 @@
     "render:long": "remotion render KlikTahuLong out/long.mp4",
     "render:short": "remotion render KlikTahuShort out/short.mp4",
     "typecheck": "tsc --noEmit",
-    "schedule": "node scripts/preview-frames.mjs"
+    "schedule": "node scripts/preview-frames.mjs",
+    "subs": "node scripts/make-srt.mjs long out/long.srt && node scripts/make-srt.mjs short out/short.srt",
+    "posters": "node scripts/make-posters.mjs"
   },
   "dependencies": {
     "@remotion/cli": "4.0.542",

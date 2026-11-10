@@ -1,0 +1,163 @@
+1
+00:00:01,467 --> 00:00:03,311
+Coba ingat harga seporsi nasi
+
+2
+00:00:03,311 --> 00:00:04,733
+ayam lima tahun lalu.
+
+3
+00:00:04,733 --> 00:00:05,522
+Sekarang?
+
+4
+00:00:05,522 --> 00:00:06,744
+Jauh lebih mahal,
+
+5
+00:00:06,744 --> 00:00:07,267
+kan?
+
+6
+00:00:07,733 --> 00:00:09,400
+Tapi gaji kita terasa jalan
+
+7
+00:00:09,400 --> 00:00:10,211
+di tempat.
+
+8
+00:00:10,211 --> 00:00:11,367
+Kamu nggak salah.
+
+9
+00:00:11,367 --> 00:00:13,189
+Uangmu memang sedang menyusut.
+
+10
+00:00:15,256 --> 00:00:17,133
+Dan biang keladinya punya nama
+
+11
+00:00:17,133 --> 00:00:18,700
+yang jarang kita sadari,
+
+12
+00:00:18,700 --> 00:00:19,433
+inflasi.
+
+13
+00:00:19,833 --> 00:00:21,933
+Inflasi itu bukan angka abstrak
+
+14
+00:00:21,933 --> 00:00:23,178
+di layar berita.
+
+15
+00:00:23,178 --> 00:00:25,167
+Dia adalah selisih antara isi
+
+16
+00:00:25,167 --> 00:00:26,922
+dompetmu dan harga di rak
+
+17
+00:00:26,922 --> 00:00:27,544
+toko.
+
+18
+00:00:29,411 --> 00:00:30,444
+Setiap bulan,
+
+19
+00:00:30,444 --> 00:00:32,878
+Badan Pusat Statistik mendatangi ribuan
+
+20
+00:00:32,878 --> 00:00:34,556
+pedagang di ratusan kota.
+
+21
+00:00:34,889 --> 00:00:37,067
+Mereka mencatat harga dari satu
+
+22
+00:00:37,067 --> 00:00:38,600
+keranjang yang sama,
+
+23
+00:00:38,600 --> 00:00:39,311
+beras,
+
+24
+00:00:39,311 --> 00:00:40,022
+cabai,
+
+25
+00:00:40,022 --> 00:00:40,789
+bensin,
+
+26
+00:00:40,789 --> 00:00:41,789
+sewa rumah,
+
+27
+00:00:41,789 --> 00:00:42,911
+sampai pulsa.
+
+28
+00:00:44,311 --> 00:00:46,233
+Keranjang itu berisi ratusan barang
+
+29
+00:00:46,233 --> 00:00:47,767
+dan jasa yang paling sering
+
+30
+00:00:47,767 --> 00:00:49,456
+dibeli rumah tangga Indonesia.
+
+31
+00:00:49,722 --> 00:00:51,367
+Setiap barang punya bobot.
+
+32
+00:00:51,367 --> 00:00:53,844
+Makanan dan minuman bobotnya paling besar,
+
+33
+00:00:53,844 --> 00:00:55,644
+karena itu yang paling sering
+
+34
+00:00:55,644 --> 00:00:56,467
+kita beli.
+
+35
+00:00:58,000 --> 00:01:00,300
+Total belanja keranjang itu dijadikan
+
+36
+00:01:00,300 --> 00:01:01,211
+satu angka.
+
+37
+00:01:01,211 --> 00:01:03,144
+Namanya Indeks Harga Konsumen.
+
+38
+00:01:03,478 --> 00:01:05,367
+Kalau bulan ini keranjangmu lebih
+
+39
+00:01:05,367 --> 00:01:07,022
+mahal satu persen dari bulan
+
+40
+00:01:07,022 --> 00:01:07,556
+lalu,
+
+41
+00:01:07,556 --> 00:01:09,589
+berarti inflasi bulanan satu persen.
