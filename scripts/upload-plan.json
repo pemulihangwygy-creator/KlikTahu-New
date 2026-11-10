@@ -1,0 +1,5 @@
+{
+  "Short": ["out/short.mp4", "out/short-poster.jpg", "out/short.srt"],
+  "Long": ["out/long.mp4", "out/long-poster.jpg", "out/long.srt"],
+  "Metadata": ["metadata/short.json", "metadata/long.json", "metadata/youtube.md", "metadata/data-sources.md"]
+}

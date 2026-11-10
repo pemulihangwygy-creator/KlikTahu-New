@@ -1,0 +1,72 @@
+name: Render
+
+# Manual only: renders are heavy and must never run on public PRs.
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: What to render
+        type: choice
+        options: [both, long, short]
+        default: both
+      upload_to_drive:
+        description: Upload the result to Google Drive
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: render-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Cache Remotion browser
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.2.0
+        with:
+          path: ~/.cache/remotion
+          key: remotion-browser-${{ runner.os }}-4.0.542
+
+      - name: Build assets and timeline
+        run: npm run assets && npm run timeline
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Render
+        run: |
+          mkdir -p out
+          if [ "${{ inputs.target }}" != "short" ]; then npm run render:long -- --log=error; fi
+          if [ "${{ inputs.target }}" != "long" ]; then npm run render:short -- --log=error; fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: renders
+          path: out/*.mp4
+          retention-days: 7
+
+      - name: Upload to Drive
+        if: ${{ inputs.upload_to_drive }}
+        env:
+          DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: node scripts/upload-drive.mjs
