@@ -62,7 +62,7 @@ export const Survey: React.FC<SceneProps> = ({lines}) => {
         })}
       </div>
 
-      <Layer from={Math.max(0, tCount - 40)} to={Math.max(400, at(lines, 1) + 30)}>
+      <Layer from={Math.max(0, tCount - 40)} to={Math.max(400, tCount + 220)}>
         <div style={{position: 'absolute', left: 0, right: 0, top: '41.5%', height: 380, overflow: 'hidden', maskImage: 'linear-gradient(180deg, transparent, #000 22%, #000 70%, transparent)', WebkitMaskImage: 'linear-gradient(180deg, transparent, #000 22%, #000 70%, transparent)'}}>
           {[0, 1, 2].map((row) => (
             <div
