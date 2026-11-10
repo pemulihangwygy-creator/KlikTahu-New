@@ -53,10 +53,12 @@ jobs:
       - name: Render
         run: |
           mkdir -p out
-          if [ "${{ inputs.target }}" != "short" ]; then npm run render:long -- --log=error; fi
-          if [ "${{ inputs.target }}" != "long" ]; then npm run render:short -- --log=error; fi
+          if [ "${{ inputs.target }}" != "short" ]; then npm run render:long; fi
+          if [ "${{ inputs.target }}" != "long" ]; then npm run render:short; fi
+          npm run subs
+          npm run posters
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: renders
           path: out/*.mp4
