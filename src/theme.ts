@@ -31,3 +31,17 @@ export const EASE = {
   inOut: [0.65, 0, 0.35, 1] as const,
   snap: [0.2, 0.9, 0.2, 1] as const,
 };
+
+/** Spring presets (stiffness/damping) for a consistent motion language. */
+export const SPRING = {
+  snappy: {stiffness: 240, damping: 20, mass: 0.7},
+  smooth: {stiffness: 120, damping: 18, mass: 0.8},
+  bouncy: {stiffness: 170, damping: 11, mass: 0.9},
+  gentle: {stiffness: 70, damping: 16, mass: 1},
+} as const;
+
+/** Global color-grade stops applied as a screen/soft-light overlay. */
+export const GRADE = {
+  key: 'rgba(255,196,90,0.10)', // warm key light
+  shade: 'rgba(30,40,90,0.14)', // cool shadow
+} as const;

@@ -1,6 +1,6 @@
 import {useCurrentFrame} from 'remotion';
 import {C, F} from '../theme';
-import {springIn} from '../lib/anim';
+import {springPop, clamp01, prog} from '../lib/anim';
 
 type Seg = {t: string; hi?: boolean; dim?: boolean};
 
@@ -33,7 +33,10 @@ export const parse = (raw: string): Seg[] => {
   return words;
 };
 
-/** Word-by-word masked reveal with keyword highlighting. */
+/**
+ * V2 kinetic headline: each word springs in from below with rotation and a
+ * scale overshoot; highlighted words get a warm gradient + a sweep underline.
+ */
 export const Headline: React.FC<{
   text: string;
   start?: number;
@@ -44,7 +47,7 @@ export const Headline: React.FC<{
   maxWidth?: number;
   line?: number;
   per?: number;
-}> = ({text, start = 0, size = 108, weight = 800, align = 'left', color = C.paper, maxWidth = 1180, line = 1.02, per = 2.4}) => {
+}> = ({text, start = 0, size = 108, weight = 800, align = 'left', color = C.paper, maxWidth = 1180, line = 1.04, per = 2.6}) => {
   const frame = useCurrentFrame();
   const words = parse(text);
   return (
@@ -67,19 +70,40 @@ export const Headline: React.FC<{
       }}
     >
       {words.map((w, i) => {
-        const s = springIn(frame, 90, start + i * per, 150, 20);
+        const delay = start + i * per;
+        const s = springPop(frame, 90, delay, 'bouncy');
+        const rise = clamp01(s * 1.4);
+        const underline = w.hi ? prog(frame, delay + 6, 26) : 0;
         return (
-          <span key={i} style={{display: 'inline-block', overflow: 'hidden', paddingBottom: size * 0.06}}>
+          <span key={i} style={{display: 'inline-block', overflow: 'hidden', paddingBottom: size * 0.1, marginBottom: size * -0.04}}>
             <span
               style={{
+                position: 'relative',
                 display: 'inline-block',
-                transform: `translateY(${(1 - s) * 104}%) rotate(${(1 - s) * 3}deg)`,
-                opacity: s,
-                color: w.hi ? C.yellow : w.dim ? C.muted : color,
-                textShadow: w.hi ? '0 0 42px rgba(255,174,31,0.35)' : undefined,
+                transform: `translateY(${(1 - rise) * 112}%) rotate(${(1 - rise) * 4}deg) scale(${0.86 + s * 0.14})`,
+                transformOrigin: '0% 100%',
+                opacity: clamp01(rise * 1.8),
+                background: w.hi ? `linear-gradient(100deg, ${C.yellow} 10%, ${C.orange} 90%)` : undefined,
+                WebkitBackgroundClip: w.hi ? 'text' : undefined,
+                backgroundClip: w.hi ? 'text' : undefined,
+                color: w.hi ? 'transparent' : w.dim ? C.muted : color,
               }}
             >
               {w.t}
+              {w.hi ? (
+                <span
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    bottom: size * 0.02,
+                    height: Math.max(4, size * 0.055),
+                    width: `${underline * 100}%`,
+                    borderRadius: 99,
+                    background: `linear-gradient(90deg, ${C.yellow}, ${C.orange})`,
+                    boxShadow: `0 0 24px rgba(255,174,31,0.55)`,
+                  }}
+                />
+              ) : null}
             </span>
           </span>
         );

@@ -1,7 +1,7 @@
 import {AbsoluteFill, useCurrentFrame} from 'remotion';
 import {C, F} from '../theme';
 import type {VoPlacement} from '../lib/timeline';
-import {clamp01} from '../lib/anim';
+import {clamp01, springPop} from '../lib/anim';
 
 const chunksOf = (text: string): string[] => {
   const parts = text.replace(/[—:]/g, ',').split(/(?<=[.,?!])\s+/);
@@ -17,11 +17,11 @@ const chunksOf = (text: string): string[] => {
   return out;
 };
 
-/** Broadcast captions: 2 short lines, active phrase in yellow. */
+/** V2 broadcast captions: frosted pill, word-by-word warm fill, pop on chunk change. */
 export const Captions: React.FC<{lines: VoPlacement[]; scale?: number; bottom?: number; maxWidth?: number}> = ({
   lines,
   scale = 1,
-  bottom = 0.135,
+  bottom = 0.115,
   maxWidth = 0.86,
 }) => {
   const frame = useCurrentFrame();
@@ -45,6 +45,8 @@ export const Captions: React.FC<{lines: VoPlacement[]; scale?: number; bottom?: 
   const text = chunks[idx];
   const words = text.split(' ');
   const lit = Math.floor(localP * words.length + 0.0001);
+  const pop = springPop(frame, 90, active.start + acc * active.dur, 'snappy');
+
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
       <div
@@ -54,7 +56,7 @@ export const Captions: React.FC<{lines: VoPlacement[]; scale?: number; bottom?: 
           right: 0,
           bottom: 0,
           height: '46%',
-          background: 'linear-gradient(180deg, transparent, rgba(5,4,8,0.62) 52%, rgba(5,4,8,0.9))',
+          background: 'linear-gradient(180deg, transparent, rgba(5,4,8,0.55) 52%, rgba(5,4,8,0.85))',
         }}
       />
       <div
@@ -63,21 +65,36 @@ export const Captions: React.FC<{lines: VoPlacement[]; scale?: number; bottom?: 
           left: `${(1 - maxWidth) * 50}%`,
           right: `${(1 - maxWidth) * 50}%`,
           bottom: `${bottom * 100}%`,
-          textAlign: 'center',
-          fontFamily: F.body,
-          fontWeight: 800,
-          fontSize: 74 * scale,
-          lineHeight: 1.16,
-          letterSpacing: '-0.015em',
-          color: C.paper,
-          textShadow: '0 4px 28px rgba(0,0,0,0.75)',
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
-        {words.map((w, i) => (
-          <span key={`${idx}-${i}`} style={{color: i <= lit ? C.yellow : C.paper, opacity: i <= lit ? 1 : 0.86}}>
-            {w}{' '}
-          </span>
-        ))}
+        <div
+          style={{
+            display: 'inline-block',
+            textAlign: 'center',
+            fontFamily: F.body,
+            fontWeight: 800,
+            fontSize: 68 * scale,
+            lineHeight: 1.22,
+            letterSpacing: '-0.015em',
+            color: C.paper,
+            padding: `${22 * scale}px ${36 * scale}px`,
+            borderRadius: 28 * scale,
+            background: 'rgba(10,8,15,0.58)',
+            border: '1px solid rgba(247,242,232,0.14)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            boxShadow: '0 18px 60px rgba(0,0,0,0.5)',
+            transform: `scale(${0.96 + pop * 0.04})`,
+          }}
+        >
+          {words.map((w, i) => (
+            <span key={`${idx}-${i}`} style={{color: i <= lit ? C.yellow : 'rgba(247,242,232,0.92)'}}>
+              {w}{' '}
+            </span>
+          ))}
+        </div>
       </div>
     </AbsoluteFill>
   );

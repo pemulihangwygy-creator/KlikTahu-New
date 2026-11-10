@@ -1,6 +1,6 @@
-import {useCurrentFrame} from 'remotion';
 import {C, F} from '../theme';
-import {clamp01, easeOut, rand} from '../lib/anim';
+import {clamp01, easeOut, rand, springPop} from '../lib/anim';
+import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {interpolate} from 'remotion';
 
 type Point = {label: string; value: number; note?: string};
@@ -71,14 +71,15 @@ export const BarChart: React.FC<{
   gap = 26,
 }) => {
   const bw = (w - gap * (series.length - 1)) / series.length;
+  const {fps} = useVideoConfig();
   return (
     <div style={{position: 'absolute', inset: 0}}>
       <Grid max={max} ticks={ticks} x={x} y={y} w={w} h={h} unit={unit} />
       <div style={{position: 'absolute', left: x, top: y + h, width: w, height: 2, background: 'rgba(247,242,232,0.26)'}} />
       {series.map((p, i) => {
         const local = clamp01((progress - i * 0.045) / 0.55);
-        const grow = easeOut(local);
-        const bh = (p.value / max) * h * grow;
+        const grow = local > 0 && local < 1 ? springPop(progress * 100, fps, i * 4.5, 'bouncy') : local;
+        const bh = Math.max(0.001, (p.value / max) * h * clamp01(grow));
         const isHi = highlight === i;
         const isCompare = compare === i;
         const left = x + i * (bw + gap);
@@ -99,7 +100,9 @@ export const BarChart: React.FC<{
                     : 'linear-gradient(180deg, rgba(247,242,232,0.5), rgba(247,242,232,0.14))',
                 boxShadow: isHi ? `0 0 70px rgba(255,150,40,0.35)` : undefined,
               }}
-            />
+            >
+              <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: Math.max(3, bh * 0.045), borderRadius: 'inherit', background: 'rgba(255,255,255,0.28)'}} />
+            </div>
             {showValues ? (
               <div
                 style={{
@@ -149,6 +152,7 @@ export const SpikeChart: React.FC<{progress: number; peak?: number; label?: stri
   label = '1998',
 }) => {
   const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
   const max = 80;
   const baseY = 1760;
   const topY = 770;
@@ -175,8 +179,9 @@ export const SpikeChart: React.FC<{progress: number; peak?: number; label?: stri
         );
       })}
       {spikes.map((s, i) => {
-        const local = easeOut(clamp01((progress - i * 0.06) / 0.6));
-        const bh = (s.v / max) * h * local;
+        const local = clamp01((progress - i * 0.06) / 0.6);
+        const grow = local > 0 && local < 1 ? springPop(progress * 100, fps, i * 6, 'bouncy') : local;
+        const bh = Math.max(0.001, (s.v / max) * h * clamp01(grow));
         const isPeak = i === 1;
         return (
           <div key={s.l}>
@@ -215,11 +220,13 @@ export const HBars: React.FC<{
   unit?: string;
   size?: number;
 }> = ({rows, progress, max = 80, x = 150, y = 980, w = 1140, rowH = 150, unit = '%', size = 62}) => {
+  const {fps} = useVideoConfig();
   return (
     <div style={{position: 'absolute', inset: 0}}>
       {rows.map((r, i) => {
-        const local = easeOut(clamp01((progress - i * 0.08) / 0.6));
-        const bw = (r.value / max) * w * local;
+        const local = clamp01((progress - i * 0.08) / 0.6);
+        const grow = local > 0 && local < 1 ? springPop(progress * 100, fps, i * 8, 'bouncy') : local;
+        const bw = (r.value / max) * w * clamp01(grow);
         const yy = y + i * rowH;
         return (
           <div key={r.label} style={{position: 'absolute', left: x, top: yy, width: w}}>
@@ -326,6 +333,7 @@ export const Sparkline: React.FC<{points?: number[]; progress: number; color?: s
   y = 1700,
   stroke = 4,
 }) => {
+  const frame = useCurrentFrame();
   const max = Math.max(...points);
   const d = points
     .map((v, i) => {
@@ -334,9 +342,34 @@ export const Sparkline: React.FC<{points?: number[]; progress: number; color?: s
       return `${i === 0 ? 'M' : 'L'}${px.toFixed(1)},${py.toFixed(1)}`;
     })
     .join(' ');
+  // draw-on via dash offset + glowing head dot at the drawing tip
+  const total = w + h * 2;
+  const headP = clamp01(progress * 1.25);
+  const headI = Math.min(points.length - 1, Math.floor(headP * (points.length - 1)));
+  const hx = (headI / (points.length - 1)) * w;
+  const hy = h - (points[headI] / max) * h;
+  const dash = total * (1 - easeOut(headP));
   return (
     <svg style={{position: 'absolute', left: x, top: y, overflow: 'visible'}} width={w} height={h}>
-      <path d={d} fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round" />
+      <defs>
+        <linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.28" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path d={`${d} L${w},${h} L0,${h} Z`} fill="url(#sparkfill)" stroke="none" opacity={clamp01((progress - 0.3) / 0.4)} />
+      <path
+        d={d}
+        fill="none"
+        stroke={color}
+        strokeWidth={stroke}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeDasharray={total}
+        strokeDashoffset={dash}
+        style={{filter: `drop-shadow(0 0 ${10 + 8 * Math.sin(frame / 8)}px ${color}88)`}}
+      />
+      <circle cx={hx} cy={hy} r={stroke * (2.2 + Math.sin(frame / 7) * 0.9)} fill={color} opacity={headP > 0.02 && headP < 1 ? 1 : 0} />
     </svg>
   );
 };

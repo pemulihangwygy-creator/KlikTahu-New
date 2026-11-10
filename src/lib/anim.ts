@@ -1,5 +1,5 @@
 import { interpolate, spring, Easing, useCurrentFrame, useVideoConfig } from 'remotion';
-import { EASE } from '../theme';
+import { EASE, SPRING } from '../theme';
 
 export const easeOut = Easing.bezier(...EASE.out);
 export const easeInOut = Easing.bezier(...EASE.inOut);
@@ -33,3 +33,11 @@ export const rand = (seed: number) => {
 };
 
 export const stagger = (i: number, per = 3, base = 0) => base + i * per;
+
+/** Overshooting spring 0..1 with a configurable preset. */
+export const springPop = (
+  frame: number,
+  fps: number,
+  delay = 0,
+  preset: keyof typeof SPRING = 'bouncy',
+) => spring({frame: frame - delay, fps, config: SPRING[preset]});

@@ -219,3 +219,50 @@ export const CircleMask: React.FC<{size?: number; top?: string; blow?: number; c
     </div>
   );
 };
+
+/**
+ * V2 scene cut: a full-frame panel in the incoming scene's accent color sweeps
+ * up and away over ~14 frames, with a soft leading edge and a brief flash.
+ * Mounted as an overlay at each scene boundary — keeps timeline math intact.
+ */
+export const SceneSweep: React.FC<{color?: string; dur?: number; delay?: number}> = ({
+  color = C.amber,
+  dur = 14,
+  delay = 0,
+}) => {
+  const frame = useCurrentFrame();
+  const f = frame - delay;
+  if (f < 0) return null;
+  const p = interpolate(f, [0, dur], [0, 1], {easing: easeOut, extrapolateRight: 'clamp'});
+  // panel covers screen at p=0..0.35, then lifts away by p=1
+  const cover = p < 0.35 ? 1 : 1 - (p - 0.35) / 0.65;
+  const y = -cover * 104; // percent, panel slides up out of frame
+  const edgeGlow = p > 0.35 && p < 0.9 ? Math.sin(((p - 0.35) / 0.55) * Math.PI) : 0;
+  return (
+    <AbsoluteFill style={{pointerEvents: 'none', zIndex: 40}}>
+      <div
+        style={{
+          position: 'absolute',
+          left: '-6%',
+          right: '-6%',
+          top: `${y}%`,
+          height: '108%',
+          background: `linear-gradient(180deg, ${color}, ${C.deepOrange})`,
+          transform: 'skewY(-1.2deg)',
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          left: '-6%',
+          right: '-6%',
+          top: `${y + 100}%`,
+          height: '16%',
+          background: `linear-gradient(180deg, rgba(255,240,200,${0.85 * edgeGlow}), transparent)`,
+          filter: 'blur(24px)',
+        }}
+      />
+      <AbsoluteFill style={{background: '#FFF3D0', opacity: p < 0.4 ? 0.35 * (1 - p / 0.4) : 0, mixBlendMode: 'screen'}} />
+    </AbsoluteFill>
+  );
+};

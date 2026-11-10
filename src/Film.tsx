@@ -1,7 +1,7 @@
 import {AbsoluteFill, Audio, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {useMemo} from 'react';
 import {FONT_CSS, useFonts} from './fonts';
-import {C} from './theme';
+import {C, GRADE} from './theme';
 import type {SceneProps} from './scenes/types';
 import {Hook} from './scenes/Hook';
 import {Reveal} from './scenes/Reveal';
@@ -17,6 +17,7 @@ import {Outro} from './scenes/Outro';
 import {FrameUI} from './components/FrameUI';
 import {Captions} from './components/Captions';
 import {SfxTrack, type Cue} from './lib/sfx';
+import {SceneSweep} from './components/FX';
 import {buildTimeline} from './lib/timeline';
 import {LONG_SCENES, SHORT_SCENES} from './data/scenes';
 import durations from './data/vo-durations.json';
@@ -56,6 +57,23 @@ const TITLES: Record<string, string> = {
 };
 
 const D = durations.durations as Record<string, number>;
+
+const SCENE_ACCENT: Record<string, string> = {
+  hook: C.amber,
+  reveal: C.yellow,
+  survey: C.sky,
+  basket: C.orange,
+  index: C.amber,
+  chart: C.orange,
+  crisis: C.red,
+  crisisShort: C.red,
+  power: C.mint,
+  contrast: C.sky,
+  contrastShort: C.sky,
+  nuance: C.mint,
+  nuanceShort: C.mint,
+  outro: C.yellow,
+};
 
 export const useFilmTimeline = (kind: 'long' | 'short') =>
   useMemo(() => {
@@ -151,6 +169,19 @@ export const Film: React.FC<{kind: 'long' | 'short'}> = ({kind}) => {
       )}
 
       <Audio src={staticFile(`music/${kind === 'long' ? 'bed' : 'short'}.mp3`)} volume={musicVolume} loop />
+
+      {/* scene-cut sweeps at every boundary except the first scene */}
+      {timeline.scenes.slice(1).map((s) => (
+        <Sequence key={`sweep-${s.id}`} from={s.start} durationInFrames={16} layout="none">
+          <SceneSweep color={SCENE_ACCENT[s.id] ?? C.amber} dur={14} />
+        </Sequence>
+      ))}
+
+      {/* global color grade: warm key from top, cool shadow from bottom */}
+      <AbsoluteFill style={{pointerEvents: 'none', zIndex: 30, mixBlendMode: 'soft-light'}}>
+        <div style={{position: 'absolute', inset: 0, background: `radial-gradient(90% 60% at 30% 12%, ${GRADE.key}, transparent 70%)`}} />
+        <div style={{position: 'absolute', inset: 0, background: `radial-gradient(100% 70% at 70% 96%, ${GRADE.shade}, transparent 70%)`}} />
+      </AbsoluteFill>
 
       <Captions lines={allLines} scale={1} bottom={0.115} maxWidth={0.84} />
       <FrameUI

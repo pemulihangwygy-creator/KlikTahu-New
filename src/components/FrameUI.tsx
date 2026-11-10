@@ -40,8 +40,25 @@ export const FrameUI: React.FC<{
               height: '100%',
               width: `${Math.min(1, Math.max(0, progress)) * 100}%`,
               background: `linear-gradient(90deg, ${C.amber}, ${C.orange})`,
+              borderRadius: 99,
+              position: 'relative',
+              boxShadow: '0 0 14px rgba(255,174,31,0.5)',
             }}
-          />
+          >
+            <span
+              style={{
+                position: 'absolute',
+                right: -4,
+                top: '50%',
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                background: C.yellow,
+                transform: 'translateY(-50%)',
+                boxShadow: '0 0 12px rgba(255,197,49,0.9)',
+              }}
+            />
+          </span>
         </span>
         <span style={{maxWidth: '46%', textAlign: 'right'}}>{sceneTitle}</span>
       </div>

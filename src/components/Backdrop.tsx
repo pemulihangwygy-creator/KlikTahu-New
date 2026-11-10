@@ -1,25 +1,45 @@
 import {AbsoluteFill, Img, staticFile, useCurrentFrame, interpolate} from 'remotion';
 import {C} from '../theme';
-import {rand} from '../lib/anim';
+import {rand, clamp01} from '../lib/anim';
 
-/** Deep field: vignette + slow-drifting warm blooms + fine grain. */
+const HUE_COLOR: Record<string, string> = {
+  amber: C.orange,
+  red: C.red,
+  mint: C.mint,
+  sky: C.sky,
+};
+
+/**
+ * V2 deep field: blurred aurora blobs + rotating conic sheen + faint dot grid
+ * + fine grain + vignette. One coherent light source per scene hue.
+ */
 export const Backdrop: React.FC<{
   hue?: 'amber' | 'red' | 'mint' | 'sky';
   intensity?: number;
   grain?: number;
-}> = ({hue = 'amber', intensity = 1, grain = 0.05}) => {
+}> = ({hue = 'amber', intensity = 1, grain = 0.055}) => {
   const frame = useCurrentFrame();
-  const tint =
-    hue === 'red' ? C.red : hue === 'mint' ? C.mint : hue === 'sky' ? C.sky : C.orange;
+  const tint = HUE_COLOR[hue] ?? C.orange;
   const t = frame / 90;
-  const blooms = [
-    {x: 22 + Math.sin(t * 0.21) * 9, y: 26 + Math.cos(t * 0.17) * 7, r: 64, c: tint, a: 0.26},
-    {x: 82 + Math.cos(t * 0.19) * 8, y: 62 + Math.sin(t * 0.23) * 9, r: 56, c: C.deepOrange, a: 0.2},
-    {x: 52 + Math.sin(t * 0.13 + 2) * 12, y: 88 + Math.cos(t * 0.11) * 5, r: 48, c: C.yellow, a: 0.12},
+
+  const blobs = [
+    {x: 24 + Math.sin(t * 0.21) * 8, y: 24 + Math.cos(t * 0.16) * 6, r: 78, c: tint, a: 0.34, blur: 130},
+    {x: 80 + Math.cos(t * 0.18) * 7, y: 58 + Math.sin(t * 0.22) * 8, r: 66, c: C.deepOrange, a: 0.26, blur: 150},
+    {x: 50 + Math.sin(t * 0.12 + 2) * 11, y: 86 + Math.cos(t * 0.1) * 5, r: 56, c: C.yellow, a: 0.16, blur: 140},
+    {x: 8 + Math.cos(t * 0.14 + 1) * 6, y: 78 + Math.sin(t * 0.19) * 7, r: 44, c: tint, a: 0.14, blur: 120},
   ];
+
+  const sheenRot = frame * 0.05;
+
   return (
     <AbsoluteFill style={{background: C.ink}}>
-      {blooms.map((b, i) => (
+      {/* base vertical gradient */}
+      <AbsoluteFill
+        style={{background: `linear-gradient(180deg, ${C.ink2} 0%, ${C.ink} 42%, #050408 100%)`}}
+      />
+
+      {/* aurora blobs */}
+      {blobs.map((b, i) => (
         <div
           key={i}
           style={{
@@ -29,19 +49,53 @@ export const Backdrop: React.FC<{
             width: `${b.r}%`,
             aspectRatio: '1',
             transform: 'translate(-50%,-50%)',
-            background: `radial-gradient(circle, ${b.c}0A 0%, ${b.c}22 26%, transparent 68%)`,
-            opacity: b.a * intensity * 1.15,
+            borderRadius: '50%',
+            background: `radial-gradient(circle, ${b.c} 0%, transparent 62%)`,
+            filter: `blur(${b.blur}px)`,
+            opacity: b.a * intensity,
           }}
         />
       ))}
+
+      {/* slow rotating conic sheen */}
+      <div
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '38%',
+          width: '190%',
+          aspectRatio: '1',
+          transform: `translate(-50%,-50%) rotate(${sheenRot}deg)`,
+          background: `conic-gradient(from 0deg, transparent 0deg, ${tint}14 40deg, transparent 90deg, ${C.yellow}0D 200deg, transparent 250deg, ${tint}10 320deg, transparent 360deg)`,
+          filter: 'blur(70px)',
+          opacity: 0.5 * intensity,
+        }}
+      />
+
+      {/* diagonal light streak */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: -20,
+          background: `linear-gradient(115deg, transparent 38%, rgba(255,240,210,0.05) 47%, transparent 56%)`,
+          transform: `translateX(${Math.sin(t * 0.3) * 40}px)`,
+        }}
+      />
+
+      {/* faint dot grid for depth */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: `radial-gradient(120% 90% at 50% 30%, transparent 30%, rgba(4,3,7,0.72) 100%)`,
+          backgroundImage: `radial-gradient(rgba(247,242,232,0.05) 1.2px, transparent 1.2px)`,
+          backgroundSize: '72px 72px',
+          maskImage: 'radial-gradient(90% 70% at 50% 40%, #000 30%, transparent 78%)',
+          opacity: 0.5,
         }}
       />
-      <AbsoluteFill style={{opacity: grain * 0.9, mixBlendMode: 'soft-light'}}>
+
+      {/* fine film grain */}
+      <AbsoluteFill style={{opacity: grain, mixBlendMode: 'soft-light'}}>
         <Img
           src={staticFile('tex/grain.png')}
           style={{
@@ -52,12 +106,27 @@ export const Backdrop: React.FC<{
           }}
         />
       </AbsoluteFill>
+
+      {/* vignette */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(130% 100% at 50% 42%, rgba(0,0,0,0) 38%, rgba(0,0,0,0.55) 78%, rgba(0,0,0,0.88) 100%)',
-          opacity: interpolate(intensity, [0, 1], [0.25, 0.9]),
+          background: 'radial-gradient(120% 90% at 50% 30%, transparent 26%, rgba(4,3,7,0.66) 74%, rgba(3,2,6,0.94) 100%)',
+          opacity: interpolate(intensity, [0, 1], [0.3, 0.95]),
+        }}
+      />
+
+      {/* bottom stage shadow so foreground type sits on solid ground */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: '34%',
+          background: 'linear-gradient(180deg, transparent, rgba(4,3,7,0.55) 70%)',
+          opacity: clamp01(intensity),
         }}
       />
     </AbsoluteFill>
