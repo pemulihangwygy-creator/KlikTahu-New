@@ -10,7 +10,9 @@ export const FrameUI: React.FC<{
   progress: number;
   wmScale?: number;
   showWatermark?: boolean;
-}> = ({index, total, sceneTitle, progress, wmScale = 1, showWatermark = true}) => {
+  revealAt?: number;
+  hideAfter?: number;
+}> = ({index, total, sceneTitle, progress, wmScale = 1, showWatermark = true, revealAt, hideAfter}) => {
   const frame = useCurrentFrame();
   return (
     <AbsoluteFill style={{pointerEvents: 'none'}}>
@@ -54,7 +56,7 @@ export const FrameUI: React.FC<{
             opacity: 0.94,
           }}
         >
-          <Watermark size={64} opacity={0.95} />
+          <Watermark size={64} opacity={0.95} enterAt={revealAt ?? 0} hideAfter={hideAfter} />
         </div>
       ) : null}
     </AbsoluteFill>

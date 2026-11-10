@@ -13,7 +13,7 @@ export const Nuance: React.FC<SceneProps> = ({lines}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const tQ = at(lines, 0, 0.42);
-  const tBut = at(lines, 0, 0.78);
+  const tBut = at(lines, 0, 0.62);
 
   const qIn = springIn(frame, fps, tQ, 160, 18);
   const butIn = easeOut(clamp01((frame - tBut) / 26));
@@ -41,16 +41,16 @@ export const Nuance: React.FC<SceneProps> = ({lines}) => {
         <Headline text="Inflasi kecil. **Hidup belum tentu** ringan." start={at(lines, 0) - 8} size={96} maxWidth={1240} />
       </div>
 
-      <div style={{position: 'absolute', left: 0, right: 0, top: '36%', textAlign: 'center', opacity: clamp01(qIn * 1.3), transform: `scale(${0.92 + qIn * 0.08})`}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: '63%', textAlign: 'center', opacity: clamp01(qIn * 1.3), transform: `scale(${0.92 + qIn * 0.08})`}}>
         <div style={{display: 'inline-flex', alignItems: 'center', gap: 26, padding: '22px 40px', borderRadius: 24, background: 'rgba(255,197,49,0.07)', border: '1px solid rgba(255,197,49,0.3)'}}>
           <span style={{fontFamily: F.display, fontWeight: 800, fontSize: 96, color: C.yellow, letterSpacing: '-0.04em'}}>?</span>
           <span style={{fontFamily: F.display, fontWeight: 700, fontSize: 52, color: C.paper, letterSpacing: '-0.02em'}}>Rata-rata ≠ pengalamanmu</span>
         </div>
       </div>
 
-      <div style={{position: 'absolute', left: '7.5%', right: '7.5%', top: '52%', display: 'flex', flexDirection: 'column', gap: 18}}>
+      <div style={{position: 'absolute', left: '7.5%', right: '7.5%', top: '33.5%', display: 'flex', flexDirection: 'column', gap: 18}}>
         {cards.map((c, i) => {
-          const p = easeOut(clamp01((frame - tBut - i * 9) / 26));
+          const p = easeOut(clamp01((frame - at(lines, 0) - 24 - i * 9) / 26));
           return (
             <div
               key={c.t}
@@ -78,7 +78,7 @@ export const Nuance: React.FC<SceneProps> = ({lines}) => {
         })}
       </div>
 
-      <div style={{position: 'absolute', left: 0, right: 0, bottom: '24%', textAlign: 'center', opacity: butIn}}>
+      <div style={{position: 'absolute', left: 0, right: 0, bottom: '16%', textAlign: 'center', opacity: butIn}}>
         <div style={{fontFamily: F.body, fontWeight: 700, fontSize: 44, color: 'rgba(247,242,232,0.75)'}}>
           Yang penting bukan angkanya. <span style={{color: C.yellow}}>Tapi isi keranjangmu.</span>
         </div>

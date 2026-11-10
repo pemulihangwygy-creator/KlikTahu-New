@@ -9,12 +9,14 @@
     "prep": "npm run assets && npm run timeline",
     "dev": "remotion studio",
     "still": "remotion still KlikTahuLong",
-    "render:long": "remotion render KlikTahuLong out/long.mp4",
-    "render:short": "remotion render KlikTahuShort out/short.mp4",
+    "render:long": "remotion render KlikTahuLong out/long-raw.mp4 --log=error && node scripts/finalize.mjs out/long-raw.mp4 out/long.mp4",
+    "render:short": "remotion render KlikTahuShort out/short-raw.mp4 --log=error && node scripts/finalize.mjs out/short-raw.mp4 out/short.mp4",
     "typecheck": "tsc --noEmit",
     "schedule": "node scripts/preview-frames.mjs",
     "subs": "node scripts/make-srt.mjs long out/long.srt && node scripts/make-srt.mjs short out/short.srt",
-    "posters": "node scripts/make-posters.mjs"
+    "posters": "node scripts/make-posters.mjs",
+    "finalize": "node scripts/finalize.mjs",
+    "deliver": "npm run prep && npm run typecheck && npm run render:long && npm run render:short && npm run subs && npm run posters"
   },
   "dependencies": {
     "@remotion/cli": "4.0.542",

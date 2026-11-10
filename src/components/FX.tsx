@@ -16,16 +16,17 @@ export const Layer: React.FC<{from: number; to: number; children: React.ReactNod
 };
 
 /** Rings rushing at the camera — the "falling into the data" shot. */
-export const Tunnel: React.FC<{rings?: number; speed?: number; color?: string; hue2?: string}> = ({
+export const Tunnel: React.FC<{rings?: number; speed?: number; color?: string; hue2?: string; z?: number}> = ({
   rings = 16,
   speed = 0.055,
   color = C.amber,
   hue2 = C.orange,
+  z = 0,
 }) => {
   const frame = useCurrentFrame();
   const t = frame * speed;
   return (
-    <AbsoluteFill style={{perspective: 1200, perspectiveOrigin: '50% 46%'}}>
+    <AbsoluteFill style={{perspective: 1200, perspectiveOrigin: '50% 46%', zIndex: z}}>
       <AbsoluteFill style={{transformStyle: 'preserve-3d'}}>
         {new Array(rings).fill(0).map((_, i) => {
           const z = -((i * 260 - ((t * 900) % 260)) % (rings * 260));
@@ -111,15 +112,16 @@ export const GridFloor: React.FC<{color?: string; opacity?: number; speed?: numb
 };
 
 /** Radial speed lines, good under reveals. */
-export const Burst: React.FC<{count?: number; reach?: number; color?: string; pulse?: number}> = ({
+export const Burst: React.FC<{count?: number; reach?: number; color?: string; pulse?: number; z?: number}> = ({
   count = 42,
   reach = 1500,
   color = C.yellow,
   pulse = 1,
+  z = 0,
 }) => {
   const frame = useCurrentFrame();
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{zIndex: z}}>
       {new Array(count).fill(0).map((_, i) => {
         const a = (i / count) * Math.PI * 2 + rand(i) * 0.22;
         const len = 160 + rand(i + 3) * 420;
@@ -183,5 +185,37 @@ export const LightSweep: React.FC<{opacity?: number}> = ({opacity = 0.16}) => {
         mixBlendMode: 'screen',
       }}
     />
+  );
+};
+
+/** Radial mask that punches a clean circle (for cut-out numbers over bars). */
+export const CircleMask: React.FC<{size?: number; top?: string; blow?: number; children?: React.ReactNode}> = ({
+  size = 760,
+  top = '41%',
+  blow = 0,
+  children,
+}) => {
+  const frame = useCurrentFrame();
+  const s = size * (1 + Math.sin(frame / 22) * 0.004 * blow);
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: '50%',
+        top,
+        width: s,
+        height: s,
+        marginLeft: -s / 2,
+        marginTop: -s / 2,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(7,6,10,0.93) 0%, rgba(7,6,10,0.86) 46%, rgba(7,6,10,0.3) 62%, rgba(7,6,10,0) 72%)',
+        display: 'grid',
+        placeItems: 'center',
+        zIndex: 3,
+        pointerEvents: 'none',
+      }}
+    >
+      {children}
+    </div>
   );
 };

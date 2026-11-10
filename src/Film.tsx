@@ -159,7 +159,9 @@ export const Film: React.FC<{kind: 'long' | 'short'}> = ({kind}) => {
         sceneTitle={TITLES[current?.id ?? ''] ?? ''}
         progress={frame / Math.max(1, timeline.total)}
         wmScale={kind === 'short' ? 1.15 : 1}
-        showWatermark={current ? !current.id.startsWith('outro') && current.id !== 'outro' : true}
+        showWatermark={current?.id !== 'outro'}
+        revealAt={kind === 'short' ? 70 : 40}
+        hideAfter={(kind === 'short' ? 60 : 75) * 90}
       />
     </AbsoluteFill>
   );

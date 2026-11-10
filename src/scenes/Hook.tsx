@@ -22,11 +22,10 @@ export const Hook: React.FC<SceneProps> = ({lines}) => {
   const tShrink = at(lines, 1, 0.42);
 
   const tagIn = springIn(frame, fps, tTag, 90, 16);
-  const yearFlip = easeOut(clamp01((frame - tNow) / 18));
-  const price = interpolate(frame, [tNow, tNow + 34], [15000, 22000], {
+  const yearFlip = easeOut(clamp01((frame - Math.min(tNow, tWage - 36)) / 18));
+  const price = interpolate(frame, [tNow, tNow + 34, tWage - 34, tWage], [15000, 22000, 22000, 22000], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
-    easing: easeOut,
   });
   const slam = springIn(frame, fps, tNow + 26, 220, 12);
   const wage = easeOut(clamp01((frame - tWage) / 34));

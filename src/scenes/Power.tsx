@@ -28,7 +28,7 @@ export const Power: React.FC<SceneProps> = ({lines}) => {
         <Kicker text="Dampak nyata" start={0} />
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: '17%', textAlign: 'center'}}>
-        <Headline text="Uang dapur **Rp500.000**" start={tWallet} size={104} align="center" />
+        <Headline text="Uang dapur **Rp500.000**" start={tWallet} size={92} align="center" maxWidth={1150} />
       </div>
 
       {/* wallet */}
@@ -36,18 +36,18 @@ export const Power: React.FC<SceneProps> = ({lines}) => {
         style={{
           position: 'absolute',
           left: '50%',
-          top: '38%',
+          top: '36.5%',
           transform: `translate(-50%,0) rotate(${-1.6 + (1 - walletIn) * 6}deg) scale(${0.92 + walletIn * 0.08})`,
           opacity: clamp01(walletIn * 1.4),
           width: 900,
         }}
       >
-        <div style={{background: `linear-gradient(160deg, #2A2118, #16110C)`, border: `1px solid rgba(255,197,49,0.3)`, borderRadius: 30, padding: '36px 40px', boxShadow: '0 50px 120px rgba(0,0,0,0.6)'}}>
+        <div style={{background: `linear-gradient(160deg, #2A2118, #16110C)`, border: `1px solid rgba(255,197,49,0.3)`, borderRadius: 30, padding: '34px 38px', boxShadow: '0 50px 120px rgba(0,0,0,0.6)'}}>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
             <div style={{fontFamily: F.mono, fontSize: 24, letterSpacing: '0.24em', color: 'rgba(247,242,232,0.4)'}}>DOMPET KELUARGA</div>
             <div style={{fontFamily: F.display, fontWeight: 800, fontSize: 30, color: C.yellow, letterSpacing: '-0.02em'}}>KlikTahu · ilustrasi</div>
           </div>
-          <div style={{marginTop: 16, fontFamily: F.display, fontWeight: 800, fontSize: 150, letterSpacing: '-0.05em', color: C.paper, lineHeight: 0.9}}>
+          <div style={{marginTop: 16, fontFamily: F.display, fontWeight: 800, fontSize: 126, letterSpacing: '-0.05em', color: C.paper, lineHeight: 0.9}}>
             {idr(500000).replace('Rp', 'Rp ')}
           </div>
           <div style={{marginTop: 26, display: 'flex', gap: 10, flexWrap: 'wrap'}}>
@@ -83,7 +83,7 @@ export const Power: React.FC<SceneProps> = ({lines}) => {
         </div>
       </div>
 
-      <div style={{position: 'absolute', left: '7.5%', right: '7.5%', top: '64%', display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 20, alignItems: 'center', opacity: clamp01((frame - tShrink) / 16)}}>
+      <div style={{position: 'absolute', left: '7.5%', right: '7.5%', top: '60.5%', display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 20, alignItems: 'center', opacity: clamp01((frame - tShrink) / 16)}}>
         <div style={{border: `1px solid ${C.line}`, borderRadius: 18, padding: '20px 22px', background: 'rgba(247,242,232,0.025)'}}>
           <div style={{fontFamily: F.mono, fontSize: 20, letterSpacing: '0.18em', color: 'rgba(247,242,232,0.42)'}}>DAYA BELI AWAL</div>
           <div style={{fontFamily: F.display, fontWeight: 800, fontSize: 64, color: C.paper, letterSpacing: '-0.04em'}}>100</div>
@@ -100,12 +100,12 @@ export const Power: React.FC<SceneProps> = ({lines}) => {
           position: 'absolute',
           left: '7.5%',
           right: '7.5%',
-          bottom: '19%',
+          bottom: '14.5%',
           opacity: clamp01((frame - tShrink - 30) / 20),
           transform: `translateY(${(1 - noteIn) * 50}px)`,
         }}
       >
-        <div style={{fontFamily: F.body, fontSize: 46, lineHeight: 1.3, color: 'rgba(247,242,232,0.82)', borderLeft: `6px solid ${C.yellow}`, paddingLeft: 26}}>
+        <div style={{fontFamily: F.body, fontSize: 40, lineHeight: 1.32, color: 'rgba(247,242,232,0.82)', borderLeft: `6px solid ${C.yellow}`, paddingLeft: 26}}>
           Harga naik <span style={{color: C.yellow, fontWeight: 800}}>77,63%</span> berarti barang yang tadinya bisa kamu beli dengan Rp500.000, setahun kemudian hanya tersisa sekitar <span style={{color: C.yellow, fontWeight: 800}}>Rp281.000</span> nilainya.
         </div>
       </div>

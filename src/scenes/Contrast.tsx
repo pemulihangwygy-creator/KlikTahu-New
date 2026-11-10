@@ -39,7 +39,7 @@ export const Contrast: React.FC<SceneProps> = ({lines}) => {
         <Headline text="Dari **terendah** sejak 1958." start={at(lines, 0) - 6} size={96} align="center" />
       </div>
 
-      <div style={{position: 'absolute', left: 0, right: 0, top: '31%', textAlign: 'center', transform: `scale(${0.86 + lowIn * 0.14})`, opacity: clamp01(lowIn * 1.4)}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: '29%', textAlign: 'center', transform: `scale(${0.82 + lowIn * 0.12})`, opacity: clamp01(lowIn * 1.4)}}>
         <div style={{fontFamily: F.mono, fontSize: 28, letterSpacing: '0.4em', color: 'rgba(59,227,167,0.85)'}}>INFLASI 2024</div>
         <div style={{filter: 'drop-shadow(0 0 60px rgba(59,227,167,0.3))'}}>
           <BigNumber to={1.57} decimals={2} start={tLow} dur={40} size={280} color={C.paper} />
@@ -49,19 +49,19 @@ export const Contrast: React.FC<SceneProps> = ({lines}) => {
         </div>
       </div>
 
-      <div style={{position: 'absolute', left: 0, right: 0, top: '61%', textAlign: 'center', opacity: clamp01((frame - tSince) / 20)}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: '50.5%', textAlign: 'center', opacity: clamp01((frame - tSince) / 20)}}>
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 30}}>
           <div style={{fontFamily: F.mono, fontSize: 24, letterSpacing: '0.3em', color: 'rgba(247,242,232,0.4)'}}>2024</div>
           <div style={{fontFamily: F.display, fontWeight: 800, fontSize: 64, color: 'rgba(247,242,232,0.35)'}}>→</div>
           <div style={{fontFamily: F.mono, fontSize: 24, letterSpacing: '0.3em', color: 'rgba(247,242,232,0.4)'}}>2025</div>
         </div>
-        <div style={{fontFamily: F.display, fontWeight: 800, fontSize: 150, letterSpacing: '-0.05em', color: C.yellow, transform: `scale(${1 + rise * 0.02})`, opacity: clamp01(rise * 1.3)}}>
+        <div style={{fontFamily: F.display, fontWeight: 800, fontSize: 118, letterSpacing: '-0.05em', color: C.yellow, transform: `scale(${1 + rise * 0.02})`, opacity: clamp01(rise * 1.3)}}>
           {FACTS.latest.toFixed(2).replace('.', ',')}%
         </div>
         <div style={{fontFamily: F.mono, fontSize: 22, letterSpacing: '0.24em', color: 'rgba(247,242,232,0.35)', opacity: clamp01(rise)}}>DESEMBER 2025 · BPS</div>
       </div>
 
-      <div style={{position: 'absolute', left: '7.5%', right: '7.5%', bottom: '20%', opacity: clamp01((frame - t2025) / 24)}}>
+      <div style={{position: 'absolute', left: '7.5%', right: '7.5%', bottom: '15%', opacity: clamp01((frame - tSince - 50) / 24)}}>
         <Layer from={0} to={400}>
           <div style={{position: 'relative', height: 260, marginTop: 10}}>
             <BarChart

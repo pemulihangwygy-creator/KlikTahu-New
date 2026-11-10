@@ -1,6 +1,6 @@
 import {useCurrentFrame} from 'remotion';
 import {C, F} from '../theme';
-import {springIn} from '../lib/anim';
+import {clamp01, springIn} from '../lib/anim';
 
 /**
  * KlikTahu wordmark — yellow with an orange edge, always legible on dark footage.
@@ -12,9 +12,15 @@ export const Watermark: React.FC<{
   variant?: 'wordmark' | 'chip';
   /** frame at which it slides in (absolute, composition-relative) */
   enterAt?: number;
-}> = ({size = 56, opacity = 0.92, variant = 'wordmark', enterAt = 0}) => {
+  /** after this many frames the mark fades out (never fully occluded) */
+  hideAfter?: number;
+  /** frames the fade takes */
+  hideDur?: number;
+}> = ({size = 56, opacity = 0.92, variant = 'wordmark', enterAt = 0, hideAfter, hideDur = 45}) => {
   const frame = useCurrentFrame();
   const s = enterAt > 0 ? springIn(frame, 90, enterAt, 140, 20) : 1;
+  const exposure =
+    hideAfter === undefined ? 1 : 1 - clamp01((frame - hideAfter) / Math.max(1, hideDur)) * 0.86;
   const y = (1 - s) * 26;
 
   if (variant === 'chip') {
@@ -29,7 +35,7 @@ export const Watermark: React.FC<{
           background: 'rgba(10,8,14,0.62)',
           border: '1px solid rgba(255,197,49,0.28)',
           backdropFilter: 'blur(12px)',
-          opacity: opacity * s,
+          opacity: opacity * s * exposure,
           transform: `translateY(${y}px)`,
         }}
       >
@@ -61,7 +67,7 @@ export const Watermark: React.FC<{
   }
 
   return (
-    <div style={{position: 'relative', opacity: opacity * s, transform: `translateY(${y}px)`}}>
+    <div style={{position: 'relative', opacity: opacity * s * exposure, transform: `translateY(${y}px)`}}>
       <div style={{display: 'flex', alignItems: 'center', gap: size * 0.24}}>
         <div
           style={{

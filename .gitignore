@@ -24,3 +24,6 @@ out/
 .vscode/
 .idea/
 *.log
+
+# generated subtitles
+metadata/*.srt

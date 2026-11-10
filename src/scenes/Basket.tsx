@@ -35,9 +35,9 @@ export const Basket: React.FC<SceneProps> = ({lines}) => {
       </div>
 
       {/* basket illustration */}
-      <Layer from={0} to={Math.max(60, tWeights - 4)}>
+      <Layer from={0} to={Math.max(60, at(lines, 1) - 6)}>
         <div style={{position: 'absolute', inset: 0}}>
-          <div style={{position: 'absolute', left: '50%', top: '60%', transform: `translate(-50%,-50%) scale(${0.9 + basketIn * 0.1})`, opacity: clamp01(basketIn), width: 900}}>
+          <div style={{position: 'absolute', left: '50%', top: '62%', transform: `translate(-50%,-50%) scale(${0.88 + basketIn * 0.12})`, opacity: clamp01(basketIn), width: 1080}}>
             <svg viewBox="0 0 900 520" width="100%">
               <defs>
                 <linearGradient id="bgr" x1="0" y1="0" x2="1" y2="1">
@@ -47,18 +47,21 @@ export const Basket: React.FC<SceneProps> = ({lines}) => {
               </defs>
               <path d="M170 190 L730 190 L660 470 L240 470 Z" fill="none" stroke="url(#bgr)" strokeWidth="10" strokeLinejoin="round" />
               <path d="M170 260 L730 260" stroke="url(#bgr)" strokeWidth="6" opacity="0.5" />
-              {new Array(9).fill(0).map((_, i) => {
-                const x = 250 + i * 50;
-                const h = 60 + ((i * 37) % 90);
-                return <rect key={i} x={x} y={190 - h} width={26} height={h} rx={8} fill={i % 3 === 0 ? C.amber : 'rgba(247,242,232,0.35)'} opacity={0.9} />;
+              {new Array(11).fill(0).map((_, i) => {
+                const x = 232 + i * 44;
+                const h = 70 + ((i * 53) % 120);
+                return <rect key={i} x={x} y={190 - h} width={30} height={h} rx={9} fill={i % 3 === 0 ? C.amber : 'rgba(247,242,232,0.32)'} opacity={0.92} />;
               })}
+              {[0, 1, 2].map((i) => (
+                <circle key={`c${i}`} cx={300 + i * 120} cy={168} r={26} fill={i === 1 ? C.orange : 'rgba(247,242,232,0.22)'} />
+              ))}
               <path d="M330 190 C330 90 570 90 570 190" fill="none" stroke="url(#bgr)" strokeWidth="12" strokeLinecap="round" />
             </svg>
           </div>
         </div>
       </Layer>
 
-      <Layer from={Math.max(0, tWeights - 6)} to={99999}>
+      <Layer from={Math.max(0, at(lines, 1) - 8)} to={99999}>
         <div style={{position: 'absolute', inset: 0}}>
           <div style={{position: 'absolute', left: '7.5%', right: '7.5%', top: '29.5%'}}>
             <Headline text="Tiap barang punya **bobot**." start={tWeights} size={92} />

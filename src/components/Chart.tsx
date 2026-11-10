@@ -150,8 +150,8 @@ export const SpikeChart: React.FC<{progress: number; peak?: number; label?: stri
 }) => {
   const frame = useCurrentFrame();
   const max = 80;
-  const baseY = 1930;
-  const topY = 700;
+  const baseY = 1760;
+  const topY = 770;
   const h = baseY - topY;
   const grow = easeOut(clamp01(progress / 0.7));
   const spikes = [
@@ -165,7 +165,7 @@ export const SpikeChart: React.FC<{progress: number; peak?: number; label?: stri
   const startX = 210;
   return (
     <div style={{position: 'absolute', inset: 0}}>
-      {[0, 20, 40, 60, 80].map((t) => {
+      {[0, 20, 40, 60].map((t) => {
         const yy = baseY - (t / max) * h;
         return (
           <div key={t}>
